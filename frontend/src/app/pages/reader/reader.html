@@ -1,0 +1,16 @@
+@if (frame(); as url) {
+  <section class="reader">
+    <iframe [src]="url" title="Livro digital"></iframe>
+  </section>
+} @else {
+  <section class="reader-message">
+    <div class="panel">
+      <h1>História fechada</h1>
+      <p>{{ error() || 'Abrindo o livro…' }}</p>
+      <div class="actions">
+        <a class="button" routerLink="/biblioteca">Biblioteca</a>
+        <a class="button-secondary" routerLink="/loja">Loja</a>
+      </div>
+    </div>
+  </section>
+}

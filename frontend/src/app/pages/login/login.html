@@ -1,0 +1,14 @@
+<section class="panel">
+  <p class="kicker">Conta do chaveiro</p>
+  <h1>Entrar</h1>
+  <p class="muted">A conta nasce na ativação do chaveiro. Use o mesmo e-mail e a mesma senha para ver a biblioteca e comprar outras histórias.</p>
+  <form class="form" [formGroup]="form" (ngSubmit)="submit()">
+    <label>E-mail<input type="email" formControlName="email" autocomplete="username" /></label>
+    <label>Senha<input type="password" formControlName="password" autocomplete="current-password" /></label>
+    @if (error()) { <p class="alert">{{ error() }}</p> }
+    <div class="actions">
+      <button class="button" type="submit" [disabled]="saving()">{{ saving() ? 'Entrando…' : 'Entrar' }}</button>
+      <a class="button-secondary" routerLink="/">Voltar</a>
+    </div>
+  </form>
+</section>

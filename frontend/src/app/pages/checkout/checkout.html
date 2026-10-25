@@ -1,0 +1,26 @@
+@if (order(); as current) {
+  <section class="panel">
+    <p class="kicker">Pedido</p>
+    <h1>{{ current.storyTitle }}</h1>
+    <p class="price">{{ current.amountCents | reais }}</p>
+    <p class="muted">Aberto em {{ current.createdAt | date:'short' }}</p>
+    @if (current.status === 'PAID') {
+      <p class="ok">Pagamento de {{ current.amountCents | reais }} registrado. A história ficou na sua biblioteca e não vai para outra conta.</p>
+      <a class="button" [routerLink]="['/ler', current.storySlug]">Abrir a história</a>
+    } @else {
+      <p class="muted">
+        Este ambiente confirma o pagamento do valor acima e libera a história nesta conta.
+        Ainda não há operadora de cartão: o botão grava o pagamento deste pedido.
+      </p>
+      @if (error()) { <p class="alert">{{ error() }}</p> }
+      <button class="button" type="button" [disabled]="saving()" (click)="pay()">
+        @if (saving()) { Confirmando… } @else { Confirmar pagamento de {{ current.amountCents | reais }} }
+      </button>
+    }
+  </section>
+} @else {
+  <section class="panel">
+    <h1>Pedido</h1>
+    <p class="alert">{{ error() || 'Carregando…' }}</p>
+  </section>
+}

@@ -1,0 +1,26 @@
+@if (!bare()) {
+  <header class="app-header">
+    <a class="brand" routerLink="/">Contos Encantados<small>Chaveiro NFC</small></a>
+    <nav class="nav">
+      <a routerLink="/loja" routerLinkActive="active">Loja</a>
+      <a routerLink="/biblioteca" routerLinkActive="active">Biblioteca</a>
+      @if (auth.isLoggedIn()) {
+        <span class="who">{{ auth.name() }}</span>
+        <button class="text-button" type="button" (click)="logout()">Sair</button>
+      } @else {
+        <a routerLink="/entrar" routerLinkActive="active">Entrar</a>
+      }
+    </nav>
+  </header>
+}
+
+<main class="app-main" [class.bare]="bare()">
+  <router-outlet />
+</main>
+
+@if (!bare()) {
+  <footer class="app-footer">
+    <span>© {{ year() }} PW2M · cada chaveiro abre a história que veio com ele</span>
+    <a routerLink="/admin">Gravar chaveiros</a>
+  </footer>
+}
