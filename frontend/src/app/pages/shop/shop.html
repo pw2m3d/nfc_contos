@@ -1,0 +1,25 @@
+<section class="panel">
+  <p class="kicker">Catálogo</p>
+  <h1>Outras histórias</h1>
+  <p class="muted">Cada história tem o próprio valor. O pagamento libera essa história só na conta que ativou o chaveiro.</p>
+  @if (error()) { <p class="alert">{{ error() }}</p> }
+</section>
+<div class="grid" style="margin-top: 16px">
+  @for (story of stories(); track story.slug) {
+    <article class="card">
+      <span class="badge">{{ story.code }}</span>
+      <h2>{{ story.title }}</h2>
+      <p class="muted">{{ story.author }}</p>
+      <p>{{ story.synopsis }}</p>
+      @if (!story.published) { <p class="muted">O arquivo ilustrado ainda não foi publicado. A compra reserva o acesso na sua conta.</p> }
+      <p class="price">{{ story.priceCents | reais }}</p>
+      @if (story.owned) {
+        <a class="button" [routerLink]="['/ler', story.slug]">Ler na biblioteca</a>
+      } @else {
+        <button class="button" type="button" [disabled]="buying() === story.slug" (click)="buy(story)">
+          {{ buying() === story.slug ? 'Abrindo pedido…' : 'Comprar esta história' }}
+        </button>
+      }
+    </article>
+  }
+</div>

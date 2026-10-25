@@ -1,0 +1,26 @@
+@if (loading()) {
+  <section class="panel"><p>Lendo o chaveiro…</p></section>
+} @else if (view(); as keychain) {
+  <section class="panel">
+    <p class="kicker">{{ keychain.publicCode }}</p>
+    <h1>{{ keychain.story.title }}</h1>
+    <p class="muted">{{ keychain.story.synopsis }}</p>
+    <p class="muted">Autor: {{ keychain.story.author }}</p>
+    <form class="form" [formGroup]="form" (ngSubmit)="submit()">
+      <h2>Ativar este chaveiro</h2>
+      <p class="muted">O PIN só funciona uma vez. A história fica neste chaveiro e na conta criada agora. Não há como transferir a ativação para outra pessoa.</p>
+      <label>Nome<input formControlName="name" autocomplete="name" /></label>
+      <label>E-mail<input type="email" formControlName="email" autocomplete="username" /></label>
+      <label>Senha<input type="password" formControlName="password" autocomplete="new-password" /></label>
+      <label>PIN da embalagem<input formControlName="pin" inputmode="numeric" maxlength="6" autocomplete="one-time-code" /></label>
+      @if (error()) { <p class="alert">{{ error() }}</p> }
+      <button class="button" type="submit" [disabled]="saving()">{{ saving() ? 'Ativando…' : 'Ativar e abrir a história' }}</button>
+    </form>
+  </section>
+} @else {
+  <section class="panel">
+    <h1>Chaveiro não encontrado</h1>
+    @if (error()) { <p class="alert">{{ error() }}</p> }
+    <a class="button" routerLink="/">Voltar ao início</a>
+  </section>
+}

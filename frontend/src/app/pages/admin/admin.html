@@ -1,0 +1,78 @@
+<section class="panel">
+  <p class="kicker">Operação</p>
+  <h1>Gravar chaveiros</h1>
+  <p class="muted">Cada chaveiro nasce com um PIN e um endereço. Grave só o endereço na tag NFC. Entregue o PIN impresso na embalagem. O PIN não fica gravado em texto e não pode ser reutilizado.</p>
+  <form class="form" [formGroup]="access" (ngSubmit)="enter()">
+    <label>Chave de administração<input type="password" formControlName="adminKey" autocomplete="current-password" /></label>
+    <button class="button" type="submit">Abrir o painel</button>
+  </form>
+  @if (error()) { <p class="alert">{{ error() }}</p> }
+  @if (notice()) { <p class="ok">{{ notice() }}</p> }
+</section>
+
+@if (ready()) {
+  <section class="split" style="margin-top: 16px">
+    <form class="panel form" [formGroup]="keychainForm" (ngSubmit)="makeKeychain()">
+      <h2>Novo chaveiro</h2>
+      <label>História incluída
+        <select formControlName="storySlug">
+          @for (story of stories(); track story.slug) {
+            <option [value]="story.slug">{{ story.code }} · {{ story.title }} · {{ story.priceCents | reais }}</option>
+          }
+        </select>
+      </label>
+      <button class="button" type="submit">Gerar chaveiro e PIN</button>
+      @if (created(); as item) {
+        <p>História: {{ item.storyTitle }}</p>
+        <p>Endereço da tag</p>
+        <p class="secret">{{ item.nfcUrl }}</p>
+        <button class="button-secondary" type="button" (click)="copy(item.nfcUrl)">Copiar endereço</button>
+        <p>PIN, anote agora</p>
+        <p class="secret">{{ item.pin }}</p>
+        <button class="button-secondary" type="button" (click)="copy(item.pin)">Copiar PIN</button>
+      }
+    </form>
+
+    <form class="panel form" [formGroup]="storyForm" (ngSubmit)="makeStory()">
+      <h2>Nova história</h2>
+      <label>Código<input formControlName="code" placeholder="0005" /></label>
+      <label>Identificador<input formControlName="slug" placeholder="a-cigarra-e-a-formiga" /></label>
+      <label>Título<input formControlName="title" /></label>
+      <label>Autor<input formControlName="author" /></label>
+      <label>Sinopse<textarea formControlName="synopsis"></textarea></label>
+      <label>Preço<input formControlName="price" placeholder="19,90" /></label>
+      <label>Arquivo HTML<input formControlName="htmlFile" placeholder="0005 - A_cigarra.html" /></label>
+      <button class="button" type="submit">Cadastrar história</button>
+    </form>
+  </section>
+
+  <form class="panel form" style="margin-top: 16px" [formGroup]="updateForm" (ngSubmit)="saveStory()">
+    <h2>Preço e arquivo</h2>
+    <label>História
+      <select formControlName="slug">
+        @for (story of stories(); track story.slug) {
+          <option [value]="story.slug">{{ story.title }}</option>
+        }
+      </select>
+    </label>
+    <label>Novo preço<input formControlName="price" placeholder="17,90" /></label>
+    <label>Arquivo HTML<input formControlName="htmlFile" placeholder="0001 - O_patinho_feio.html" /></label>
+    <label><span>Ativa na loja</span><input type="checkbox" formControlName="active" /></label>
+    <button class="button" type="submit">Salvar alterações</button>
+  </form>
+
+  <section class="panel" style="margin-top: 16px">
+    <h2>Chaveiros</h2>
+    <div class="grid">
+      @for (item of keychains(); track item.publicCode) {
+        <article class="card">
+          <span class="badge">{{ item.status === 'ACTIVATED' ? 'Ativado' : 'Aguardando PIN' }}</span>
+          <h3>{{ item.storyTitle }}</h3>
+          <p>{{ item.publicCode }}</p>
+          <p class="muted">{{ item.ownerEmail || 'Sem dono' }}</p>
+          <p class="muted">{{ item.createdAt | date:'short' }}</p>
+        </article>
+      }
+    </div>
+  </section>
+}

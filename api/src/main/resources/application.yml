@@ -1,0 +1,27 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/nfc_contos
+    username: nfc
+    password: nfc
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate.jdbc.time_zone: UTC
+  flyway:
+    enabled: true
+  jackson:
+    default-property-inclusion: non_null
+
+app:
+  jwt-secret: ${JWT_SECRET:dev-only-change-me-nfc-contos-jwt-secret-32b}
+  jwt-hours: ${JWT_HOURS:72}
+  admin-key: ${ADMIN_KEY:troque-esta-chave-admin}
+  public-base-url: ${PUBLIC_BASE_URL:http://localhost:4200}
+  stories-dir: ${STORIES_DIR:..}
+  ticket-hours: ${TICKET_HOURS:12}
+  frame-ancestors: "${FRAME_ANCESTORS:http://localhost:4200 http://127.0.0.1:4200}"

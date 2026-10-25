@@ -1,0 +1,20 @@
+<section class="panel">
+  <p class="kicker">Sua conta</p>
+  <h1>Biblioteca</h1>
+  <p class="muted">Aqui ficam a história do chaveiro e as que você comprou. O acesso continua nesta conta.</p>
+  @if (error()) { <p class="alert">{{ error() }}</p> }
+  @if (!error() && items().length === 0) {
+    <p>Nenhuma história ainda. Ative um chaveiro ou passe na <a routerLink="/loja">loja</a>.</p>
+  }
+</section>
+<div class="grid" style="margin-top: 16px">
+  @for (item of items(); track item.slug) {
+    <article class="card">
+      <span class="badge">{{ origin(item.source) }}</span>
+      <h2>{{ item.title }}</h2>
+      <p class="muted">{{ item.author }}</p>
+      <p>{{ item.synopsis }}</p>
+      <a class="button" [routerLink]="['/ler', item.slug]">Abrir</a>
+    </article>
+  }
+</div>
